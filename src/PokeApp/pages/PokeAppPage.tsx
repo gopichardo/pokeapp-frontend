@@ -1,7 +1,7 @@
-import { Button } from "../Buttons/Button"
+import { Button } from "../../components/Buttons/StartButton"
 
 
-export const Index = () => {
+export const PokeAppPage = () => {
 
     const handleClickStart = () => {
         alert('Start');
