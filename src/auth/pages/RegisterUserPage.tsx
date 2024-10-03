@@ -5,12 +5,11 @@ import { StepPage } from "../../PokeApp/types/StepPage";
 import { LocationStep } from "./register-steps/LocationStep";
 import { PokemonSelectionStep } from "./register-steps/PokemonSelectionStep";
 import { RegisterContext } from "../context/RegisterContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { FinalStep } from "./register-steps/FinalStep";
 
 export const RegisterUserPage = () => {
-
     const { step: { currentStep } } = useContext(RegisterContext)
-
 
     const pages: StepPage[] = [
         { page: < UserStep />, title: "User Information", stepName: "User", index: 0 },
@@ -25,9 +24,18 @@ export const RegisterUserPage = () => {
 
     const { page, title } = pageToRender as StepPage;
 
+    const [showFinalPage, setShowFinalPage] = useState(false);
+
+    const onFinish = () => {
+        setShowFinalPage(true);
+    }
+
     return (
-        <RegisterUserLayout title={title} steps={titles}>
-            {page}
-        </RegisterUserLayout >
+        showFinalPage ?
+            <FinalStep />
+            :
+            <RegisterUserLayout title={title} steps={titles} onFinish={onFinish}>
+                {page}
+            </RegisterUserLayout >
     )
 }

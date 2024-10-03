@@ -1,19 +1,20 @@
-import { useContext } from "react";
-import { RegisterContext } from "../../context/RegisterContext";
 import { Button } from "@mui/material";
-
+import { useSelector } from "react-redux";
+import { IRootState } from "../../../store/store";
 
 export const FinalStep = () => {
-    const { userPreferences } = useContext(RegisterContext);
 
-    const { user: { name } } = userPreferences;
-
+    const preferences = useSelector((state: IRootState) => state.preferences);
+    console.log('preferences State: ', preferences);
 
     return (
         <>
-            <h2>Thank you {name}!</h2>
+            <h2>Thank you {preferences.userInformation?.name}!</h2>
             <p>Now you can go to the home page</p>
-            <Button variant="contained">Go Home</Button>
+            <code>
+                {JSON.stringify(preferences, null, 2)}
+            </code>
+            <Button variant="contained" href="/home">Go Home</Button>
         </>
     )
 }

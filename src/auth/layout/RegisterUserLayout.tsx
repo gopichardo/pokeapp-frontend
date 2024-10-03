@@ -1,4 +1,4 @@
-import { Button, Container, Grid2, MobileStepper, Step, StepLabel, Stepper } from "@mui/material"
+import { Button, Container, Grid2, MobileStepper, Step, StepLabel, Stepper, Typography } from "@mui/material"
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
@@ -7,7 +7,7 @@ import { UseStepper } from "../../hooks/UseStepper";
 import { RegisterContext } from "../context/RegisterContext";
 import { useContext } from "react";
 
-export const RegisterUserLayout = ({ children, title, steps }: RegisterUserLayoutProps) => {
+export const RegisterUserLayout = ({ children, title, steps, onFinish }: RegisterUserLayoutProps) => {
 
     const { step: { currentStep } } = useContext(RegisterContext)
 
@@ -31,7 +31,9 @@ export const RegisterUserLayout = ({ children, title, steps }: RegisterUserLayou
                         </Step>
                     ))}
                 </Stepper>
-                <h2>{title}</h2>
+                <Typography variant="h4" align="center" sx={{ mt: 2, mb: 2 }}>
+                    {title}
+                </Typography>
                 {children}
                 {/* Button < prev,next > */}
                 <MobileStepper
@@ -49,7 +51,7 @@ export const RegisterUserLayout = ({ children, title, steps }: RegisterUserLayou
                             variant="contained"
                             color="primary"
                             endIcon={isFinalStep ? <SaveOutlinedIcon /> : <ArrowForwardIosIcon />}
-                            onClick={handleOnClickNextButton}>
+                            onClick={isFinalStep ? onFinish : handleOnClickNextButton}>
                             {isFinalStep ? 'Finish' : 'Next'}
                         </Button>}
                     steps={totalSteps}
@@ -64,4 +66,5 @@ type RegisterUserLayoutProps = {
     children: React.ReactNode;
     title: string;
     steps: string[];
+    onFinish: () => void;
 }

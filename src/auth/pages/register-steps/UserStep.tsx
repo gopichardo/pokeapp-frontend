@@ -1,58 +1,36 @@
 import { Box, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
-import { useContext } from "react";
-import { RegisterContext } from "../../context/RegisterContext";
 import { DateTime } from "luxon";
+import { IRootState, useAppDispatch } from "../../../store/store";
+import { setUser } from "../../../store/preferences/thunks";
+import { useSelector } from "react-redux";
+import { UserInformationtype } from "../../../PokeApp/types/UserInformation.type";
 
 
 export const UserStep = () => {
+    const dispatch = useAppDispatch();
 
-    const { userPreferences, setUserPreferences } = useContext(RegisterContext);
+    const preferences = useSelector((state: IRootState) => state.preferences);
 
-    const { user: { name, email, birthDate }, geolocation, pokemonList } = userPreferences;
+    const { name, email, birthDate } = preferences.userInformation as UserInformationtype;
 
     const dateObject = birthDate ? DateTime.fromISO(birthDate) : undefined;
 
 
-
     const onchangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUserPreferences({
-            user: {
-                name: event.target.value,
-                email,
-                birthDate
-            },
-            geolocation,
-            pokemonList
-        });
+
+        dispatch(setUser({ name: event.target.value, email, birthDate }));
     }
     const onchangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUserPreferences({
-            user: {
-                name,
-                email: event.target.value,
-                birthDate
-            },
-            geolocation,
-            pokemonList
-        });
+
+        dispatch(setUser({ name, email: event.target.value, birthDate }));
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onChangeBirthDate = (newValue: DateTime<true> | DateTime<false> | null) => {
-        setUserPreferences({
-            user: {
-                name,
-                email,
-                birthDate: newValue?.toISO() || ''
-            },
-            geolocation,
-            pokemonList
-        });
 
+        dispatch(setUser({ name, email, birthDate: newValue?.toISO() || '' }));
     }
-
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
