@@ -18,8 +18,8 @@ export const AppRouter = () => {
          */
 
         <Routes>
-            <Route path='/*' element={<PokeAppRoutes />} />
-            <Route path='/auth/*' element={<AuthRoutes />} />
+                <Route path='/*' element={<PokeAppRoutes />} />
+                <Route path='/auth/*' element={<AuthRoutes />} />
         </Routes>
     )
 }

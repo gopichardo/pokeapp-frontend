@@ -1,3 +1,4 @@
+import { RegisterProvider } from "./auth/context/RegisterProvider"
 import { AppRouter } from "./router/AppRouter"
 import { AppTheme } from "./theme"
 
@@ -5,7 +6,9 @@ import { AppTheme } from "./theme"
 export const PokeaApp = () => {
     return (
         <AppTheme>
-            <AppRouter />
+            <RegisterProvider>
+                <AppRouter />
+            </RegisterProvider>
         </AppTheme>
     )
 }

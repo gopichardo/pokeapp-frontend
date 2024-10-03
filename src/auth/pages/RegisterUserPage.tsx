@@ -1,61 +1,32 @@
-import { Box, Button, FormHelperText, TextField } from "@mui/material"
-import { RegisterUserLayout } from "../../PokeApp/layout/RegisterUserLayout"
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
+import { RegisterUserLayout } from "../layout/RegisterUserLayout"
 import './RegisterUserPage.css'
+import { UserStep } from "./register-steps/UserStep";
+import { StepPage } from "../../PokeApp/types/StepPage";
+import { LocationStep } from "./register-steps/LocationStep";
+import { PokemonSelectionStep } from "./register-steps/PokemonSelectionStep";
+import { FinalStep } from "./register-steps/FinalStep";
+import { RegisterContext } from "../context/RegisterContext";
+import { useContext } from "react";
 
 export const RegisterUserPage = () => {
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-    }
+    const { step: { currentStep } } = useContext(RegisterContext)
+
+
+    const pages: StepPage[] = [
+        { page: < UserStep />, title: "User Information", stepName: "User", index: 0 },
+        { page: < LocationStep />, title: "Location Permission", stepName: "Location", index: 1 },
+        { page: < PokemonSelectionStep />, title: "Pokemon Selection", stepName: "Pokemon", index: 2 },
+        { page: < FinalStep />, title: "End", stepName: 'End', index: 3 }
+    ];
+
+    const titles = pages.map(({ stepName }) => stepName);
+
+    const pageToRender = pages.find(({ index }) => index === currentStep)?.page;
 
     return (
-        <RegisterUserLayout title="User Information">
-            <form onSubmit={handleSubmit}>
-                <TextField
-                    label="Name"
-                    fullWidth
-                    name="name"
-                    placeholder="John Doe"
-                    onChange={() => { }}
-                    helperText={"Validation"}
-                />
-                <TextField
-                    sx={{ mt: 2 }}
-                    label="Email"
-                    fullWidth
-                    name="email"
-                    onChange={() => { }}
-                    helperText={"Validation"}
-                    placeholder="john.doe@gmail.com"
-                />
-                <Box sx={{ mt: 2, }} width={1}>
-                    <LocalizationProvider dateAdapter={AdapterLuxon}>
-                        <DatePicker
-                            className="date-picker"
-                            label="Birthdate"
-                            name="birthdate"
-                            onChange={() => { }}
-                            format="dd/MM/yyyy"
-                        />
-                        <FormHelperText></FormHelperText>
-                    </LocalizationProvider>
-                </Box>
-                <Button
-                    sx={{ mt: 2 }}
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    size="large"
-                    endIcon={<NavigateNextIcon />}
-                >
-                    Continue
-                </Button>
-
-            </form>
+        <RegisterUserLayout title="Register" steps={titles}>
+            {pageToRender}
         </RegisterUserLayout >
     )
 }
