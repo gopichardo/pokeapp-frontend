@@ -17,7 +17,14 @@ export const UseStepper = ({ totalSteps }: UseStepperProps) => {
     if (step > 0) setStep({ currentStep: step - 1 });
   };
 
-  return { step, totalSteps, nextStep, prevStep };
+  return {
+    step,
+    totalSteps,
+    nextStep,
+    prevStep,
+    isFirstStep: step === 0,
+    isFinalStep: step === totalSteps - 1,
+  };
 };
 
 type UseStepperProps = {

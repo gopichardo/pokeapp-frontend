@@ -1,6 +1,8 @@
 import { Button, Container, Grid2, MobileStepper, Step, StepLabel, Stepper } from "@mui/material"
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import { UseStepper } from "../../hooks/UseStepper";
 import { RegisterContext } from "../context/RegisterContext";
 import { useContext } from "react";
@@ -9,7 +11,7 @@ export const RegisterUserLayout = ({ children, title, steps }: RegisterUserLayou
 
     const { step: { currentStep } } = useContext(RegisterContext)
 
-    const { step, totalSteps, prevStep, nextStep } = UseStepper({ totalSteps: steps.length, initialStep: currentStep });
+    const { step, totalSteps, prevStep, nextStep, isFirstStep, isFinalStep } = UseStepper({ totalSteps: steps.length, initialStep: currentStep });
 
     const handleOnClickBackButton = () => {
         prevStep();
@@ -38,17 +40,17 @@ export const RegisterUserLayout = ({ children, title, steps }: RegisterUserLayou
                         <Button
                             variant="outlined"
                             color="primary"
-                            startIcon={<ArrowBackIosIcon />}
+                            startIcon={isFirstStep ? <CancelOutlinedIcon /> : <ArrowBackIosIcon />}
                             onClick={handleOnClickBackButton}>
-                            Back
+                            {isFirstStep ? 'Cancel' : "Back"}
                         </Button>}
                     nextButton={
                         <Button
                             variant="contained"
                             color="primary"
-                            endIcon={<ArrowForwardIosIcon />}
+                            endIcon={isFinalStep ? <SaveOutlinedIcon /> : <ArrowForwardIosIcon />}
                             onClick={handleOnClickNextButton}>
-                            Next
+                            {isFinalStep ? 'Finish' : 'Next'}
                         </Button>}
                     steps={totalSteps}
                     activeStep={step}>
