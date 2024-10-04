@@ -14,7 +14,7 @@ export const FinalStep = () => {
             <code>
                 {JSON.stringify(preferences, null, 2)}
             </code>
-            <Button variant="contained" href="/home">Go Home</Button>
+            <Button variant="contained" onClick={() => window.location.href = '/home'} >Go Home</Button>
         </>
     )
 }
