@@ -1,8 +1,9 @@
-import { Typography } from "@mui/material"
+import { Divider } from "@mui/material"
 import { PokemonList } from "../../../PokeApp/components/PokemonList"
 import { PokemonItemType } from "../../../PokeApp/types/PokemonItem.type";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../../store/store";
+import { SearchPokemon } from "../../../PokeApp/components/SearchPokemon";
 
 
 export const PokemonSelectionStep = () => {
@@ -31,13 +32,14 @@ export const PokemonSelectionStep = () => {
 
     return (
         <>
-            <Typography variant="h6" align="center">
+            <Divider textAlign="center" sx={{ mt: 2, fontWeight: "bold" }} variant="fullWidth">
                 Available Pokemons
-            </Typography>
+            </Divider>
+            <SearchPokemon />
             <PokemonList pokemonList={availablePokemons} />
-            <Typography variant="h6" align="center" sx={{ mt: 2 }}>
+            <Divider textAlign="center" sx={{ mt: 2, fontWeight: "bold" }} variant="fullWidth">
                 Selected Pokemons
-            </Typography>
+            </Divider>
             <PokemonList pokemonList={selectedPokemons} />
         </>
     )
