@@ -3,38 +3,82 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from "luxon";
 import { IRootState, useAppDispatch } from "../../../store/store";
-import { setUser } from "../../../store/preferences/thunks";
 import { useSelector } from "react-redux";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import { UserInformationtype } from "../../../PokeApp/types/UserInformation.type";
+import { setUserInformation } from "../../../store/preferences/preferencesSlice";
 
 
-export const UserStep = () => {
+type UserStepProps = {
+    index: number;
+}
+
+export interface UserStepRef {
+    validateStep: () => boolean;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const UserStep = forwardRef<UserStepRef, UserStepProps>(({ index }, ref) => {
     const dispatch = useAppDispatch();
 
     const preferences = useSelector((state: IRootState) => state.preferences);
+    const storeUserInformation = preferences.userInformation;
 
-    const { name, email, birthDate } = preferences.userInformation as UserInformationtype;
 
+
+    const [userInfo, setUserInfo] = useState<UserInformationtype>({ ...storeUserInformation });
+    const { name, email, birthDate } = userInfo;
     const dateObject = birthDate ? DateTime.fromISO(birthDate) : undefined;
 
-
     const onchangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-
-        dispatch(setUser({ name: event.target.value, email, birthDate }));
+        setUserInfo({
+            ...userInfo,
+            name: event.target.value.trim()
+        });
     }
     const onchangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-
-        dispatch(setUser({ name, email: event.target.value, birthDate }));
+        setUserInfo({
+            ...userInfo,
+            email: event.target.value.trim()
+        });
     }
 
     const onChangeBirthDate = (newValue: DateTime<true> | DateTime<false> | null) => {
-
-        dispatch(setUser({ name, email, birthDate: newValue?.toISO() || '' }));
+        setUserInfo({
+            ...userInfo,
+            birthDate: newValue?.toISO() ?? ''
+        });
     }
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        console.log('submit user form');
     }
+
+    const validateStep = (): boolean => {
+        const allValid = name.length > 0 && email.length > 0;
+
+        console.log('isValidStep step?', allValid);
+
+        if (allValid) {
+            dispatch(setUserInformation({
+                name: userInfo.name,
+                email: userInfo.email,
+                birthDate: userInfo.birthDate
+            }));
+        }
+        return allValid;
+    }
+
+    useImperativeHandle(ref, () => {
+        return {
+            validateStep: () => {
+                const isValid = validateStep();
+
+                return isValid;
+            }
+        }
+    });
 
     return (
         <form onSubmit={handleSubmit}>
@@ -71,4 +115,4 @@ export const UserStep = () => {
             </Box>
         </form>
     )
-}
+})

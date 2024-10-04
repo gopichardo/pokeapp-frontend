@@ -7,7 +7,16 @@ import { UseStepper } from "../../hooks/UseStepper";
 import { RegisterContext } from "../context/RegisterContext";
 import { useContext } from "react";
 
-export const RegisterUserLayout = ({ children, title, steps, onFinish }: RegisterUserLayoutProps) => {
+
+type RegisterUserLayoutProps = {
+    children: React.ReactNode;
+    title: string;
+    steps: string[];
+    isStepValid: () => boolean;
+    onFinish: () => void;
+}
+
+export const RegisterUserLayout = ({ children, title, steps, onFinish, isStepValid }: RegisterUserLayoutProps) => {
 
     const { step: { currentStep } } = useContext(RegisterContext)
 
@@ -18,7 +27,12 @@ export const RegisterUserLayout = ({ children, title, steps, onFinish }: Registe
     }
 
     const handleOnClickNextButton = () => {
-        nextStep();
+        if (isStepValid()) {
+            nextStep();
+        }
+
+        if (isFinalStep && isStepValid()) { onFinish() }
+
     }
 
     return (
@@ -51,7 +65,9 @@ export const RegisterUserLayout = ({ children, title, steps, onFinish }: Registe
                             variant="contained"
                             color="primary"
                             endIcon={isFinalStep ? <SaveOutlinedIcon /> : <ArrowForwardIosIcon />}
-                            onClick={isFinalStep ? onFinish : handleOnClickNextButton}>
+                            onClick={handleOnClickNextButton}
+                            disabled={false}
+                        >
                             {isFinalStep ? 'Finish' : 'Next'}
                         </Button>}
                     steps={totalSteps}
@@ -62,9 +78,3 @@ export const RegisterUserLayout = ({ children, title, steps, onFinish }: Registe
     )
 }
 
-type RegisterUserLayoutProps = {
-    children: React.ReactNode;
-    title: string;
-    steps: string[];
-    onFinish: () => void;
-}
