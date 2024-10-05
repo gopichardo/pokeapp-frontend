@@ -1,12 +1,11 @@
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from "luxon";
-import { IRootState, useAppDispatch } from "../../../store/store";
-import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../../store/store";
 import { forwardRef, useImperativeHandle, useState } from "react";
-import { UserInformationtype } from "../../../PokeApp/types/UserInformation.type";
 import { setUserInformation } from "../../../store/preferences/preferencesSlice";
+import { useForm } from "../../../hooks/useForm";
 
 
 type UserStepProps = {
@@ -19,55 +18,54 @@ export interface UserStepRef {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const UserStep = forwardRef<UserStepRef, UserStepProps>(({ index }, ref) => {
+    const [formSubmitted, setFormSubmitted] = useState(false);
+
+    const formValidations = {
+        name: [(value: string) => value.length > 0, 'Name is required'],
+        email: [(value: string) => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(value);
+        }, 'A valid Email is required'],
+        birthDate: [(value: string) => DateTime.fromISO(value).isValid, 'Enter a valid date']
+    };
+
+    const formData = {
+        name: '',
+        email: '',
+        birthDate: undefined
+    };
+
+    const {
+        email,
+        emailValid,
+        name,
+        nameValid,
+        isFormValid,
+        onInputChange
+    } = useForm(formData, formValidations);
+
     const dispatch = useAppDispatch();
 
-    const preferences = useSelector((state: IRootState) => state.preferences);
-    const storeUserInformation = preferences.userInformation;
+    const [birthDateValid, setBirthDateValid] = useState('');
+    const [birthDate, setBirthDate] = useState<DateTime>();
 
-
-
-    const [userInfo, setUserInfo] = useState<UserInformationtype>({ ...storeUserInformation });
-    const { name, email, birthDate } = userInfo;
-    const dateObject = birthDate ? DateTime.fromISO(birthDate) : undefined;
-
-    const onchangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUserInfo({
-            ...userInfo,
-            name: event.target.value.trim()
-        });
-    }
-    const onchangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUserInfo({
-            ...userInfo,
-            email: event.target.value.trim()
-        });
-    }
-
-    const onChangeBirthDate = (newValue: DateTime<true> | DateTime<false> | null) => {
-        setUserInfo({
-            ...userInfo,
-            birthDate: newValue?.toISO() ?? ''
-        });
-    }
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('submit user form');
+        setFormSubmitted(true);
+
+        if (!isFormValid) return;
     }
 
     const validateStep = (): boolean => {
-        const allValid = name.length > 0 && email.length > 0;
-
-        console.log('isValidStep step?', allValid);
-
-        if (allValid) {
+        if (isFormValid) {
             dispatch(setUserInformation({
-                name: userInfo.name,
-                email: userInfo.email,
-                birthDate: userInfo.birthDate
+                name,
+                email,
+                birthDate: birthDate?.toISO() ?? ''
             }));
         }
-        return allValid;
+
+        return isFormValid;
     }
 
     useImperativeHandle(ref, () => {
@@ -75,21 +73,24 @@ export const UserStep = forwardRef<UserStepRef, UserStepProps>(({ index }, ref) 
             validateStep: () => {
                 const isValid = validateStep();
 
+                setFormSubmitted(true);
+
                 return isValid;
             }
         }
     });
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={onSubmit}>
             <TextField
                 label="Name"
                 fullWidth
                 name="name"
                 placeholder="John Doe"
                 value={name}
-                onChange={onchangeName}
-                helperText={"Validation"}
+                onChange={onInputChange}
+                error={!!nameValid && formSubmitted}
+                helperText={formSubmitted ? nameValid : null}
             />
             <TextField
                 sx={{ mt: 2 }}
@@ -98,8 +99,9 @@ export const UserStep = forwardRef<UserStepRef, UserStepProps>(({ index }, ref) 
                 name="email"
                 placeholder="john.doe@gmail.com"
                 value={email}
-                onChange={onchangeEmail}
-                helperText={"Validation"}
+                onChange={onInputChange}
+                error={!!emailValid && formSubmitted}
+                helperText={formSubmitted ? emailValid : null}
             />
             <Box sx={{ mt: 2, }} width={1}>
                 <LocalizationProvider dateAdapter={AdapterLuxon}>
@@ -108,10 +110,25 @@ export const UserStep = forwardRef<UserStepRef, UserStepProps>(({ index }, ref) 
                         label="Birthdate"
                         name="birthdate"
                         format="dd/MM/yyyy"
-                        value={dateObject}
-                        onChange={(newValue) => onChangeBirthDate(newValue)}
+                        // value={birthDate}
+                        maxDate={DateTime.now()}
+                        minDate={DateTime.now().minus({ years: 100 })}
+                        onError={(error) => {
+                            console.log("on error");
+                            setBirthDateValid(error?.toString() ?? '');
+                        }}
+                        onAccept={(value) => {
+                            console.log("on accept");
+                            setBirthDate(DateTime.fromISO(value?.toString() ?? ''));
+                            setBirthDateValid('');
+                            setFormSubmitted(true);
+                        }}
                     />
                 </LocalizationProvider>
+                {!!birthDateValid && formSubmitted}
+                <Typography variant="caption" color="error" marginLeft="14px">
+                    {formSubmitted ? birthDateValid : null}
+                </Typography>
             </Box>
         </form>
     )
