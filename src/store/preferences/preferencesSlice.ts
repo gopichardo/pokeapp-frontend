@@ -13,6 +13,7 @@ const initialState: UserPreferencesType = {
   location: {
     latitude: 0,
     longitude: 0,
+    locationEnabled: false,
   },
   pokemonList: [],
 };
