@@ -1,4 +1,4 @@
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from "luxon";
@@ -26,7 +26,6 @@ export const UserStep = forwardRef<UserStepRef, UserStepProps>(({ index }, ref) 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(value);
         }, 'A valid Email is required'],
-        birthDate: [(value: string) => DateTime.fromISO(value).isValid, 'Enter a valid date']
     };
 
     const formData = {
@@ -46,33 +45,48 @@ export const UserStep = forwardRef<UserStepRef, UserStepProps>(({ index }, ref) 
 
     const dispatch = useAppDispatch();
 
-    const [birthDateValid, setBirthDateValid] = useState('');
-    const [birthDate, setBirthDate] = useState<DateTime>();
+    const [birthDateValid, setBirthDateValid] = useState<string | null>('A valid date is required');
+    const [birthDate, setBirthDate] = useState<DateTime | undefined>(undefined);
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setFormSubmitted(true);
-
-        if (!isFormValid) return;
     }
 
     const validateStep = (): boolean => {
-        if (isFormValid) {
+        const validStep = isFormValid && birthDateValid === null;
+
+        if (validStep) {
             dispatch(setUserInformation({
                 name,
                 email,
                 birthDate: birthDate?.toISO() ?? ''
             }));
         }
+        return validStep;
+    }
 
-        return isFormValid;
+    const validateDate = (date: string): void => {
+
+        const valid = DateTime.fromISO(date).isValid;
+
+        if (!valid) {
+            setBirthDateValid('A valid date is required');
+        }
+
+        const difference = DateTime.now()
+            .diff(DateTime.fromISO(date)).as('years');
+        if (difference < 12) {
+            setBirthDateValid('You must be at least 12 years old');
+        }
+        else {
+            setBirthDateValid(null);
+        }
     }
 
     useImperativeHandle(ref, () => {
         return {
             validateStep: () => {
                 const isValid = validateStep();
-
                 setFormSubmitted(true);
 
                 return isValid;
@@ -114,22 +128,31 @@ export const UserStep = forwardRef<UserStepRef, UserStepProps>(({ index }, ref) 
                         maxDate={DateTime.now()}
                         minDate={DateTime.now().minus({ years: 100 })}
                         onError={(error) => {
-                            console.log("on error");
-                            setBirthDateValid(error?.toString() ?? '');
+                            if (error) {
+                                setBirthDateValid('A valid date is required');
+                            }
                         }}
                         onAccept={(value) => {
-                            console.log("on accept");
+                            // setFormSubmitted(true);
                             setBirthDate(DateTime.fromISO(value?.toString() ?? ''));
-                            setBirthDateValid('');
-                            setFormSubmitted(true);
+                            validateDate(value?.toISO() ?? '')
+
+                        }}
+                        onChange={
+                            (value) => {
+                                setBirthDate(DateTime.fromISO(value?.toString() ?? ''));
+                                validateDate(value?.toISO() ?? '')
+                            }
+                        }
+                        slotProps={{
+                            textField: {
+                                error: !!birthDateValid && formSubmitted,
+                                helperText: formSubmitted ? birthDateValid : null
+                            }
                         }}
                     />
                 </LocalizationProvider>
-                {!!birthDateValid && formSubmitted}
-                <Typography variant="caption" color="error" marginLeft="14px">
-                    {formSubmitted ? birthDateValid : null}
-                </Typography>
             </Box>
-        </form>
+        </form >
     )
 })
