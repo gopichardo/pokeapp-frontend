@@ -61,6 +61,11 @@ export const PokemonSelectionStep = forwardRef<IUserStepRef, PokemonSelectionSte
         fetchPokemons();
     }, [pokemonList]);
 
+    useEffect(() => {
+        if (pokemonList.length >= 2) {
+            setOpenAlertPokemonSelection(false);
+        }
+    }, [pokemonList]);
 
     useImperativeHandle(ref, () => {
         return {
