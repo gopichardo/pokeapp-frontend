@@ -7,18 +7,14 @@ import { forwardRef, useImperativeHandle, useState } from "react";
 import { setUserInformation } from "../../../store/preferences/preferencesSlice";
 import { useForm } from "../../../hooks/useForm";
 import { useSelector } from "react-redux";
+import { IUserStepRef } from "../../types/user-step-ref.interface";
 
 
 type UserStepProps = {
     index: number;
 }
 
-export interface UserStepRef {
-    validateStep: () => boolean;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const UserStep = forwardRef<UserStepRef, UserStepProps>(({ index }, ref) => {
+export const UserStep = forwardRef<IUserStepRef, UserStepProps>((_props, ref) => {
 
     const preferences = useSelector((state: IRootState) => state.preferences);
 

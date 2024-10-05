@@ -1,10 +1,18 @@
 import { FormControlLabel, Switch } from "@mui/material";
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import { LocationCard } from "../../../components/Cards/LocationCard";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../../store/store";
+import { IUserStepRef } from "../../types/user-step-ref.interface";
 
-export const LocationStep = () => {
+type LocationStepProps = {
+    index: number;
+}
+
+
+
+
+export const LocationStep = forwardRef<IUserStepRef, LocationStepProps>((_props, ref) => {
     const preferences = useSelector((state: IRootState) => state.preferences);
 
     const { location: { latitude, longitude } } = preferences;
@@ -16,6 +24,16 @@ export const LocationStep = () => {
 
         console.log('checked: ', event.target.checked);
     }
+
+
+    useImperativeHandle(ref, () => {
+        return {
+            validateStep: () => {
+                return false;
+            }
+        }
+    }
+    )
 
     return (
         <>
@@ -35,4 +53,6 @@ export const LocationStep = () => {
                 longitude={longitude} />
         </>
     )
-}
+})
+
+
