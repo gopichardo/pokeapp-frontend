@@ -1,15 +1,32 @@
 import { Card, CardHeader, CardMedia, IconButton } from "@mui/material"
 import MyLocationOutlinedIcon from '@mui/icons-material/MyLocationOutlined';
+import { useBrowserGeolocation } from "../../hooks/useBrowserGeolocation";
+import { useEffect, useState } from "react";
+import { getCityNameFromCoordinates } from "../../api/geocoding";
 
-export const LocationCard = ({ cityName }: LocationCardProps) => {
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
+export const LocationCard = ({ cityName: initialCityName = 'City', latitude, longitude }: LocationCardProps) => {
+
+    const { queryLocationPermission } = useBrowserGeolocation();
+
+    const [cityName, setCityName] = useState<string | undefined>(initialCityName);
+
+    useEffect(() => {
+        const fetchCityName = async () => {
+            if (latitude && longitude) {
+                const fetchedCityName = await getCityNameFromCoordinates(latitude, longitude);
+                setCityName(fetchedCityName);
+            }
+        };
+
+        fetchCityName();
+    }, [latitude, longitude]);
+
 
     const handleRefreshLocation = () => {
-        /**
-         * TODO
-         * -
-         * Handle current location
-         */
-
+        console.log('handleRefreshLocation')
+        queryLocationPermission();
     }
 
     return (
@@ -28,9 +45,9 @@ export const LocationCard = ({ cityName }: LocationCardProps) => {
                     ><MyLocationOutlinedIcon />
                     </IconButton>} />
             <CardMedia
-                component="iframe" // Use iframe to embed Google Maps
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.721968728332!2d-99.1580786859021!3d19.43411934592267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1f8a54023314b%3A0x27f723a90acc5f0!2sAngel%20de%20la%20Independencia%2C%20Centro%2C%20Cuauht%C3%A9moc%2C%2006000%20Ciudad%20de%20M%C3%A9xico%2C%20CDMX!5e0!3m2!1ses-419!2smx!4v1680088468848!5m2!1ses-419!2smx" // Replace with your desired Google Maps embed URL
-                title="Google Maps"
+                component="iframe"
+                src={`https://www.google.com/maps/embed/v1/place?key=${GOOGLE_MAPS_API_KEY}&q=${latitude},${longitude}`}
+                title="Map"
                 sx={{ flexGrow: 1 }}
             />
         </Card>
@@ -39,6 +56,6 @@ export const LocationCard = ({ cityName }: LocationCardProps) => {
 
 type LocationCardProps = {
     cityName: string;
-    latitude: number;
-    longitude: number;
+    latitude?: number;
+    longitude?: number;
 }

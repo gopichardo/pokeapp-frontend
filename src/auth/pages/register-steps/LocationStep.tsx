@@ -1,9 +1,11 @@
 import { FormControlLabel, Switch } from "@mui/material";
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle } from "react";
 import { LocationCard } from "../../../components/Cards/LocationCard";
-import { useSelector } from "react-redux";
-import { IRootState } from "../../../store/store";
+import { IRootState, useAppDispatch } from "../../../store/store";
 import { IUserStepRef } from "../../types/user-step-ref.interface";
+import { useBrowserGeolocation } from "../../../hooks/useBrowserGeolocation";
+import { useSelector } from "react-redux";
+import { setLocationState } from "../../../store/preferences/thunks";
 
 type LocationStepProps = {
     index: number;
@@ -13,23 +15,52 @@ type LocationStepProps = {
 
 
 export const LocationStep = forwardRef<IUserStepRef, LocationStepProps>((_props, ref) => {
+    const dispatch = useAppDispatch();
+
     const preferences = useSelector((state: IRootState) => state.preferences);
+    const { location: { latitude, longitude, locationEnabled: stateLocationEnabled } } = preferences;
 
-    const { location: { latitude, longitude } } = preferences;
+    const {
+        queryLocationPermission,
+        locationResponse,
+        askForGeolocationSupport,
+        locationEnabled,
+        setLocationEnabled
+    } = useBrowserGeolocation(
+        {
+            defaultLatitude: latitude,
+            defaultLongitude: longitude,
+            defaultLocationEnabled: stateLocationEnabled
+        });
 
-    const [allowLocationChecked, setAllowLocationChecked] = useState(false);
+    useEffect(() => {
+        askForGeolocationSupport();
+    }, [locationEnabled])
+
+
+
 
     const handleOnCheckAllowLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAllowLocationChecked(event.target.checked);
 
-        console.log('checked: ', event.target.checked);
+        if (event.target.checked) {
+            queryLocationPermission();
+        }
+        setLocationEnabled(event.target.checked);
     }
 
 
     useImperativeHandle(ref, () => {
         return {
             validateStep: () => {
-                return false;
+                const { latitude, longitude } = locationResponse;
+
+                dispatch(setLocationState({
+                    latitude: latitude as number,
+                    longitude: longitude as number,
+                    locationEnabled: locationEnabled as boolean
+                }))
+
+                return true;
             }
         }
     }
@@ -40,7 +71,8 @@ export const LocationStep = forwardRef<IUserStepRef, LocationStepProps>((_props,
             <FormControlLabel label="Allow app to access your location" control={
                 <Switch
                     size="medium"
-                    checked={allowLocationChecked}
+                    value={locationEnabled}
+                    checked={locationEnabled}
                     onChange={handleOnCheckAllowLocation}
                     inputProps={{ 'aria-label': 'controlled' }}
                 >
@@ -48,11 +80,9 @@ export const LocationStep = forwardRef<IUserStepRef, LocationStepProps>((_props,
             } >
             </FormControlLabel>
             <LocationCard
-                cityName="Mexico City"
-                latitude={latitude}
-                longitude={longitude} />
+                cityName='...'
+                latitude={locationResponse?.latitude ?? 0}
+                longitude={locationResponse?.longitude ?? 0} />
         </>
     )
 })
-
-
