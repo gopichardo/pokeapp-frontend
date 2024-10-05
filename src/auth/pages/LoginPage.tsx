@@ -1,5 +1,7 @@
+import { Button } from "@mui/material"
+
 export const LoginPage = () => {
     return (
-        <div>LoginPage</div>
+        <Button variant="contained" color="primary" href="/auth/register">Register</Button>
     )
 }

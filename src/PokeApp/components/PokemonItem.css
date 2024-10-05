@@ -1,0 +1,16 @@
+.switch-icon-selected,
+.switch-icon-unselected {
+    width: 27px;
+    height: 27px;
+    margin-top: -3px;
+}
+
+.switch-icon-unselected {
+    margin-left: -5px;
+    filter: grayscale(80%);
+}
+
+.switch-icon-disabled {
+    filter: grayscale(100%);
+    opacity: 0.6;
+}
