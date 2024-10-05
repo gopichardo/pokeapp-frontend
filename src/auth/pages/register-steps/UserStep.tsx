@@ -2,10 +2,11 @@ import { Box, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { DateTime } from "luxon";
-import { useAppDispatch } from "../../../store/store";
+import { IRootState, useAppDispatch } from "../../../store/store";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { setUserInformation } from "../../../store/preferences/preferencesSlice";
 import { useForm } from "../../../hooks/useForm";
+import { useSelector } from "react-redux";
 
 
 type UserStepProps = {
@@ -18,6 +19,11 @@ export interface UserStepRef {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const UserStep = forwardRef<UserStepRef, UserStepProps>(({ index }, ref) => {
+
+    const preferences = useSelector((state: IRootState) => state.preferences);
+
+    const { userInformation } = preferences;
+
     const [formSubmitted, setFormSubmitted] = useState(false);
 
     const formValidations = {
@@ -29,9 +35,7 @@ export const UserStep = forwardRef<UserStepRef, UserStepProps>(({ index }, ref) 
     };
 
     const formData = {
-        name: '',
-        email: '',
-        birthDate: undefined
+        ...userInformation
     };
 
     const {
@@ -45,8 +49,8 @@ export const UserStep = forwardRef<UserStepRef, UserStepProps>(({ index }, ref) 
 
     const dispatch = useAppDispatch();
 
-    const [birthDateValid, setBirthDateValid] = useState<string | null>('A valid date is required');
-    const [birthDate, setBirthDate] = useState<DateTime | undefined>(undefined);
+    const [birthDateValid, setBirthDateValid] = useState<string | null>(DateTime.fromISO(userInformation.birthDate).isValid ? null : 'A valid date is required');
+    const [birthDate, setBirthDate] = useState<DateTime>(DateTime.fromISO(userInformation.birthDate));
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -124,7 +128,7 @@ export const UserStep = forwardRef<UserStepRef, UserStepProps>(({ index }, ref) 
                         label="Birthdate"
                         name="birthdate"
                         format="dd/MM/yyyy"
-                        // value={birthDate}
+                        value={birthDate}
                         maxDate={DateTime.now()}
                         minDate={DateTime.now().minus({ years: 100 })}
                         onError={(error) => {
