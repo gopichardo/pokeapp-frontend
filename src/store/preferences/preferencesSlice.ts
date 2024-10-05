@@ -42,6 +42,12 @@ export const preferencesSlice = createSlice({
     setLocation: (state, action: { payload: LocationType; type: string }) => {
       state.location = action.payload;
     },
+    setUserPreferences: (
+      state,
+      action: { payload: UserPreferencesType; type: string }
+    ) => {
+      state = { ...state, ...action.payload };
+    },
   },
 });
 
@@ -50,4 +56,5 @@ export const {
   removePokemonItem,
   setUserInformation,
   setLocation,
+  setUserPreferences,
 } = preferencesSlice.actions;

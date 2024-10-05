@@ -8,10 +8,12 @@ import { RegisterContext } from "../context/RegisterContext";
 import { useContext, useRef, useState } from "react";
 import { FinalStep } from "./register-steps/FinalStep";
 import { IUserStepRef } from "../types/user-step-ref.interface";
+import { useUserPreferences } from "../../hooks/useUserPreferences";
 
 export const RegisterUserPage = () => {
-    const { step: { currentStep } } = useContext(RegisterContext)
+    const { preferences } = useUserPreferences();
 
+    const { step: { currentStep } } = useContext(RegisterContext)
     const userStepRef = useRef<IUserStepRef>(null);
 
     const pages: StepPage[] = [
@@ -28,6 +30,7 @@ export const RegisterUserPage = () => {
     const [showFinalPage, setShowFinalPage] = useState(false);
 
     const onFinish = () => {
+        console.log('preferences on store and local storage: ', preferences);
         setShowFinalPage(true);
     }
 
