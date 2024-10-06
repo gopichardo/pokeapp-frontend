@@ -1,5 +1,10 @@
+import { PokeAppLayout } from "../layout/PokeAppLayout"
+
 export const WeatherPage = () => {
   return (
-    <div>WeatherPage</div>
+    <PokeAppLayout >
+      <div>WeatherPage</div>
+    </PokeAppLayout>
+
   )
 }

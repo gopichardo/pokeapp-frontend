@@ -1,5 +1,9 @@
+import { PokeAppLayout } from "../layout/PokeAppLayout"
+
 export const UserPreferencesPage = () => {
   return (
-    <div>UserPreferencesPage</div>
+    <PokeAppLayout>
+      <div>UserPreferencesPage</div>
+    </PokeAppLayout>
   )
 }
