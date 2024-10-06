@@ -3,24 +3,34 @@ import { UserPreferencesType } from "../../PokeApp/types/UserPreferences.type";
 import { PokemonItemType } from "../../PokeApp/types/PokemonItem.type";
 import { UserInformationtype } from "../../PokeApp/types/UserInformation.type";
 import { LocationType } from "../../PokeApp/types/Location.type";
+import { LOCAL_STORAGE_PREFERENCES_KEY } from "../../hooks/useSavePreferencesLocalStorage";
 
-const initialState: UserPreferencesType = {
-  userInformation: {
-    name: "",
-    email: "",
-    birthDate: "",
-  },
-  location: {
-    latitude: 0,
-    longitude: 0,
-    locationEnabled: false,
-  },
-  pokemonList: [],
+const initUserPreferences = () => {
+  const initialState: UserPreferencesType = {
+    userInformation: {
+      name: "",
+      email: "",
+      birthDate: "",
+    },
+    location: {
+      latitude: 0,
+      longitude: 0,
+      locationEnabled: false,
+    },
+    pokemonList: [],
+  };
+
+  const storageValue = localStorage.getItem(LOCAL_STORAGE_PREFERENCES_KEY);
+
+  if (!storageValue) return initialState;
+
+  const userPreferences: UserPreferencesType = JSON.parse(storageValue || "{}");
+  return userPreferences;
 };
 
 export const preferencesSlice = createSlice({
   name: "preferences",
-  initialState,
+  initialState: initUserPreferences(),
   reducers: {
     addPokemonItem: (
       state,
