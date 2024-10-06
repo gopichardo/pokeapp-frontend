@@ -37,10 +37,6 @@ export const useBrowserGeolocation = (params?: UseBrowserGeolocationParams) => {
 
   const success = (pos: any) => {
     const crd = pos.coords;
-    console.log("Your current position is:");
-    console.log(`Latitude : ${crd.latitude}`);
-    console.log(`Longitude: ${crd.longitude}`);
-    console.log(`More or less ${crd.accuracy} meters.`);
 
     setLocationEnabled(true);
 
@@ -59,8 +55,6 @@ export const useBrowserGeolocation = (params?: UseBrowserGeolocationParams) => {
 
   const queryLocationPermission = () => {
     navigator.permissions.query({ name: "geolocation" }).then((result) => {
-      console.log(result);
-
       if (result.state === "granted") {
         navigator.geolocation.getCurrentPosition(success, errors, options);
       } else if (result.state === "prompt") {

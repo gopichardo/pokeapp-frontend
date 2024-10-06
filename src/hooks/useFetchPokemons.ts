@@ -32,6 +32,7 @@ export const useFetchPokemons = ({
           checked: pokemonList.some(
             (selectedPokemon) => selectedPokemon.name === pokemon.name
           ),
+          abilities: pokemon.abilities,
         }));
         setAllPokemons(formattedPokemons);
       } catch (error) {
