@@ -25,7 +25,6 @@ export const LocationCard = ({ cityName: initialCityName = 'City', latitude, lon
 
 
     const handleRefreshLocation = () => {
-        console.log('handleRefreshLocation')
         queryLocationPermission();
     }
 

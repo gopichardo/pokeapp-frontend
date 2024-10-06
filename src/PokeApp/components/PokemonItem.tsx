@@ -8,7 +8,9 @@ import PokeballIcon from '../../assets/images/pokeball.png'
 import './PokemonItem.css';
 
 
-export const PokemonItem = ({ pokemon: { name, image, checked: initialChecked } }: PokemonItemProps) => {
+export const PokemonItem = ({ pokemon }: PokemonItemProps) => {
+
+    const { name, image, checked: initialChecked} = pokemon
     const dispatch = useAppDispatch();
     const [checked, setChecked] = useState(initialChecked);
 
@@ -21,7 +23,10 @@ export const PokemonItem = ({ pokemon: { name, image, checked: initialChecked } 
         setChecked(value);
 
         if (value) {
-            dispatch(selectPokemonItem({ name, image, checked: true }));
+            dispatch(selectPokemonItem({
+                ...pokemon,
+                checked: true
+            }));
 
         } else {
             dispatch(unselectPokemonItem(name));

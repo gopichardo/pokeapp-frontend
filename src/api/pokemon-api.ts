@@ -14,11 +14,18 @@ export const getPokemons = async (limit = 12): Promise<Pokemon[]> => {
       const pokemonDetailsResponse = await axios.get(pokemon.url as string);
       const pokemonDetails = pokemonDetailsResponse.data;
 
-      return {
+      const abilities = pokemonDetails.abilities.map(
+        (ability: { ability: { name: string } }) => ability.ability.name
+      );
+
+      const newPokemon: Pokemon = {
         name: pokemon.name,
         image: pokemonDetails.sprites.front_default,
         url: pokemon.url,
-      } as Pokemon;
+        abilities,
+      };
+
+      return newPokemon;
     });
 
     return Promise.all(pokemonPromises);

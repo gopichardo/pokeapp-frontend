@@ -5,7 +5,7 @@ import { IRootState } from "../../../store/store";
 export const FinalStep = () => {
 
     const preferences = useSelector((state: IRootState) => state.preferences);
-    console.log('preferences State: ', preferences);
+
 
     return (
         <>
