@@ -14,14 +14,6 @@ export const FinalStep = () => {
             <code>
                 {JSON.stringify(preferences, null, 2)}
             </code>
-            {
-                /**
-                 * TODO
-                 * -
-                 * * Change onclick method to navigate route /home
-                 * ! Currently render home page but the url in the browser is still auth/register
-                 */
-            }
             <Button variant="contained" onClick={() => window.location.href = '/home'} >Go Home</Button>
         </>
     )
