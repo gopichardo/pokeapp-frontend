@@ -1,6 +1,9 @@
+import { PokeAppLayout } from "../layout/PokeAppLayout"
 
 export const PokemonListPage = () => {
     return (
-        <div>PokemonListPage</div>
+        <PokeAppLayout>
+            <div>PokemonListPage</div>
+        </PokeAppLayout>
     )
 }
