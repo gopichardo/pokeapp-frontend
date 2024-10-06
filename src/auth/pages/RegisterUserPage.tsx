@@ -8,10 +8,11 @@ import { RegisterContext } from "../context/RegisterContext";
 import { useContext, useRef, useState } from "react";
 import { FinalStep } from "./register-steps/FinalStep";
 import { IUserStepRef } from "../types/user-step-ref.interface";
+import { useSavePreferencesLocalStorage } from "../../hooks/useSavePreferencesLocalStorage";
 
 export const RegisterUserPage = () => {
+    useSavePreferencesLocalStorage();
     const { step: { currentStep } } = useContext(RegisterContext)
-
     const userStepRef = useRef<IUserStepRef>(null);
 
     const pages: StepPage[] = [

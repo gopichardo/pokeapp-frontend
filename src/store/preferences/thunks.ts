@@ -7,7 +7,9 @@ import {
   removePokemonItem,
   setLocation,
   setUserInformation,
+  setUserPreferences,
 } from "./preferencesSlice";
+import { UserPreferencesType } from "../../PokeApp/types/UserPreferences.type";
 
 export const selectPokemonItem = (pokemon: PokemonItemType) => {
   return async (dispatch: Dispatch) => {
@@ -30,5 +32,11 @@ export const setUser = (userInformation: UserInformationtype) => {
 export const setLocationState = (location: LocationType) => {
   return async (dispatch: Dispatch) => {
     dispatch(setLocation(location));
+  };
+};
+
+export const setPreferences = (preferences: UserPreferencesType) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(setUserPreferences(preferences));
   };
 };
