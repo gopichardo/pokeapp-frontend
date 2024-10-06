@@ -4,6 +4,7 @@ import { PokemonItemType } from "../../PokeApp/types/PokemonItem.type";
 import { UserInformationtype } from "../../PokeApp/types/UserInformation.type";
 import { LocationType } from "../../PokeApp/types/Location.type";
 import { LOCAL_STORAGE_PREFERENCES_KEY } from "../../hooks/useSavePreferencesLocalStorage";
+import { decodePreferencesBase64 } from "../../utils/base64-util";
 
 const initUserPreferences = () => {
   const initialState: UserPreferencesType = {
@@ -24,7 +25,9 @@ const initUserPreferences = () => {
 
   if (!storageValue) return initialState;
 
-  const userPreferences: UserPreferencesType = JSON.parse(storageValue || "{}");
+  const userPreferences: UserPreferencesType = JSON.parse(
+    decodePreferencesBase64(storageValue) || "{}"
+  );
   return userPreferences;
 };
 
