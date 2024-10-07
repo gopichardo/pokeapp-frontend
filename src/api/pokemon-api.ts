@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Pokemon } from "../domain/model/pokemon.model";
-
-const POKEAPI_BASE_URL = import.meta.env.VITE_POKEAPI_BASE_URL;
+import { POKEAPI_BASE_URL } from "../config/envrinmoment-config";
 
 export const getPokemons = async (limit = 12): Promise<Pokemon[]> => {
   try {
