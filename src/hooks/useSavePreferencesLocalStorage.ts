@@ -2,8 +2,7 @@ import { useSelector } from "react-redux";
 import { IRootState } from "../store/store";
 import { useEffect } from "react";
 import { encodePreferencesBase64 } from "../utils/base64-util";
-
-export const LOCAL_STORAGE_PREFERENCES_KEY = "userPreferences";
+import { LOCAL_STORAGE_PREFERENCES_KEY } from "../config/envrinmoment-config";
 
 export const useSavePreferencesLocalStorage = () => {
   const preferences = useSelector((state: IRootState) => state.preferences);

@@ -7,9 +7,13 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import CatchingPokemonOutlinedIcon from '@mui/icons-material/CatchingPokemonOutlined';
 import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import { logout } from "../../store/preferences/thunks";
+import { useAppDispatch } from "../../store/store";
 
 
 export const ResponsiveAppBar = () => {
+
+    const dispatch = useAppDispatch();
 
     const [open, setOpen] = useState(false);
     const location = useLocation();
@@ -34,6 +38,11 @@ export const ResponsiveAppBar = () => {
     }
 
     const handleNavigation = (link: string) => {
+
+        if (link === '/logout') {
+            dispatch(logout());
+        }
+
         navigate(link);
         toggleDrawer(false);
     };
