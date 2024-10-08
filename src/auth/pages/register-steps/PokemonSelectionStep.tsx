@@ -48,6 +48,9 @@ export const PokemonSelectionStep = forwardRef<IUserStepRef, unknown>((_, ref) =
                     <img src={PokeballIcon} alt="Pokeball" className="pokeball-badge-icon" />
                 </Badge>
             </Divider>
+            <Box flexGrow={1} overflow="auto">
+                <PokemonList pokemonList={allPokemons} />
+            </Box>
             <Collapse in={openAlertPokemonSelection}>
                 <Alert
                     variant="standard"
@@ -68,9 +71,6 @@ export const PokemonSelectionStep = forwardRef<IUserStepRef, unknown>((_, ref) =
                     You must select at least {minSelectablePokemons} pokemons
                 </Alert>
             </Collapse>
-            <Box flexGrow={1} overflow="auto">
-                <PokemonList pokemonList={allPokemons} />
-            </Box>
         </Box>
     );
 })
