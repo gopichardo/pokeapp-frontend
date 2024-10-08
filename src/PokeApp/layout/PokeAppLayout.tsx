@@ -10,10 +10,12 @@ type PokeAppLayoutProps = {
 export const PokeAppLayout = ({ children }: PokeAppLayoutProps) => {
     return (
         <Grid2 container>
-            <Container>
+            <Grid2 size={12}>
                 <ResponsiveAppBar></ResponsiveAppBar>
-                {children}
-            </Container>
+                <Container>
+                    {children}
+                </Container>
+            </Grid2>
         </Grid2>
     )
 }
