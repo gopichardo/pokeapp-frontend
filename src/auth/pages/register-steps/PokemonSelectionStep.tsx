@@ -8,12 +8,7 @@ import PokeballIcon from '../../../assets/images/pokeball.png';
 import './PokemonSelectionStep.css';
 
 
-
-type PokemonSelectionStepProps = {
-    index: number;
-}
-
-export const PokemonSelectionStep = forwardRef<IUserStepRef, PokemonSelectionStepProps>((_props, ref) => {
+export const PokemonSelectionStep = forwardRef<IUserStepRef, unknown>((_, ref) => {
     const [openAlertPokemonSelection, setOpenAlertPokemonSelection] = useState(false);
 
     const {
