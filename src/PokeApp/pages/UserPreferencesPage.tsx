@@ -43,7 +43,7 @@ export const UserPreferencesPage = () => {
       <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
         You can modify your Preferences
       </Typography>
-      <Stack spacing={2}>
+      <Stack sx={{ mb: 2 }} spacing={2}>
         <Divider orientation="horizontal" flexItem >User Information</Divider>
         <UserStep ref={userRef} />
         <Divider orientation="horizontal" flexItem>Location</Divider>
@@ -81,7 +81,6 @@ export const UserPreferencesPage = () => {
           </Alert>
         </Collapse>
         <Button
-          sx={{ mb: 3 }}
           endIcon={<SaveOutlinedIcon />}
           variant="contained"
           color="primary"
@@ -92,7 +91,6 @@ export const UserPreferencesPage = () => {
           Save
         </Button>
       </Stack>
-
     </PokeAppLayout>
   )
 }

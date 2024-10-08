@@ -23,11 +23,7 @@ export const WaetherCard = ({
     description }: WaetherCardProps) => {
 
     return (
-        <Card sx={{
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-        }}>
+        <Card sx={{ display: "flex", flexDirection: "column" }}>
             <CardHeader
                 avatar={
                     <Avatar variant="circular" sx={{ backgroundColor: 'primary.main' }} >
@@ -46,7 +42,7 @@ export const WaetherCard = ({
                 component="iframe"
                 src={`https://www.google.com/maps/embed/v1/place?key=${GOOGLE_MAPS_API_KEY}&q=${latitude},${longitude}`}
                 title="Map"
-                sx={{ flexGrow: 1 }}
+                sx={{ flexGrow: 1, height: '30vh' }}
             />
             <CardContent>
                 <Typography variant="h6">
