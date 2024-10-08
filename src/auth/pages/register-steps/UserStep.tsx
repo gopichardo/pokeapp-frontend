@@ -7,14 +7,8 @@ import { forwardRef, useImperativeHandle, useState } from "react";
 import { setUserInformation } from "../../../store/preferences/preferencesSlice";
 import { useForm } from "../../../hooks/useForm";
 import { useSelector } from "react-redux";
-import { IUserStepRef } from "../../types/user-step-ref.interface";
 
-
-type UserStepProps = {
-    index: number;
-}
-
-export const UserStep = forwardRef<IUserStepRef, UserStepProps>((_props, ref) => {
+export const UserStep = forwardRef((_, ref) => {
 
     const preferences = useSelector((state: IRootState) => state.preferences);
 
@@ -52,19 +46,6 @@ export const UserStep = forwardRef<IUserStepRef, UserStepProps>((_props, ref) =>
         e.preventDefault();
     }
 
-    const validateStep = (): boolean => {
-        const validStep = isFormValid && birthDateValid === null;
-
-        if (validStep) {
-            dispatch(setUserInformation({
-                name,
-                email,
-                birthDate: birthDate?.toISO() ?? ''
-            }));
-        }
-        return validStep;
-    }
-
     const validateDate = (date: string): void => {
 
         const valid = DateTime.fromISO(date).isValid;
@@ -86,8 +67,17 @@ export const UserStep = forwardRef<IUserStepRef, UserStepProps>((_props, ref) =>
     useImperativeHandle(ref, () => {
         return {
             validateStep: () => {
-                const isValid = validateStep();
                 setFormSubmitted(true);
+                const isValid = isFormValid && birthDateValid === null;
+
+
+                if (isValid) {
+                    dispatch(setUserInformation({
+                        name,
+                        email,
+                        birthDate: birthDate?.toISO() ?? ''
+                    }));
+                }
 
                 return isValid;
             }
@@ -133,7 +123,6 @@ export const UserStep = forwardRef<IUserStepRef, UserStepProps>((_props, ref) =>
                             }
                         }}
                         onAccept={(value) => {
-                            // setFormSubmitted(true);
                             setBirthDate(DateTime.fromISO(value?.toString() ?? ''));
                             validateDate(value?.toISO() ?? '')
 

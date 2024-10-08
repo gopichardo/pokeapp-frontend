@@ -7,6 +7,7 @@ export const getPokemons = async (limit = 12): Promise<Pokemon[]> => {
     const response = await axios.get(
       `${POKEAPI_BASE_URL}pokemon?limit=${limit}`
     );
+
     const pokemonData = response.data.results as Pokemon[];
 
     const pokemonPromises = pokemonData.map(async (pokemon) => {

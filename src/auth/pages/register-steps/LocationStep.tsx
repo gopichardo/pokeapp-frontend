@@ -1,24 +1,29 @@
 import { FormControlLabel, Switch } from "@mui/material";
 import { forwardRef, useEffect, useImperativeHandle } from "react";
-import { LocationCard } from "../../../components/Cards/LocationCard";
 import { IRootState, useAppDispatch } from "../../../store/store";
 import { IUserStepRef } from "../../types/user-step-ref.interface";
 import { useBrowserGeolocation } from "../../../hooks/useBrowserGeolocation";
 import { useSelector } from "react-redux";
 import { setLocationState } from "../../../store/preferences/thunks";
+import { WaetherCard } from "../../../PokeApp/components/WaetherCard";
+import { useFetchWeather } from "../../../hooks/useFetchWeather";
+import { WeatherData } from "../../../domain/model/weather.model";
 
-type LocationStepProps = {
-    index: number;
-}
-
-
-
-
-export const LocationStep = forwardRef<IUserStepRef, LocationStepProps>((_props, ref) => {
+export const LocationStep = forwardRef<IUserStepRef, unknown>((_, ref) => {
     const dispatch = useAppDispatch();
 
     const preferences = useSelector((state: IRootState) => state.preferences);
     const { location: { latitude, longitude, locationEnabled: stateLocationEnabled } } = preferences;
+
+    const { weather } = useFetchWeather({ latitude, longitude });
+
+    const {
+        description,
+        humidity,
+        cityName,
+        currentTemperature,
+        minTemperature,
+        maxTemperature } = weather as WeatherData;
 
     const {
         queryLocationPermission,
@@ -68,7 +73,7 @@ export const LocationStep = forwardRef<IUserStepRef, LocationStepProps>((_props,
 
     return (
         <>
-            <FormControlLabel label="Allow app to access your location" control={
+            <FormControlLabel label="Allow get location to show weather" control={
                 <Switch
                     size="medium"
                     value={locationEnabled}
@@ -79,10 +84,19 @@ export const LocationStep = forwardRef<IUserStepRef, LocationStepProps>((_props,
                 </Switch>
             } >
             </FormControlLabel>
-            <LocationCard
-                cityName='...'
-                latitude={locationResponse?.latitude ?? 0}
-                longitude={locationResponse?.longitude ?? 0} />
+            {
+                locationEnabled &&
+                <WaetherCard
+                    cityName={cityName}
+                    latitude={latitude}
+                    longitude={longitude}
+                    description={description}
+                    currentTemperature={currentTemperature}
+                    minTemperature={minTemperature}
+                    maxTemperature={maxTemperature}
+                    humidity={humidity}
+                />
+            }
         </>
     )
 })

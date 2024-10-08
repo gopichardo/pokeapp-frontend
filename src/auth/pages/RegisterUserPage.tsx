@@ -16,9 +16,9 @@ export const RegisterUserPage = () => {
     const userStepRef = useRef<IUserStepRef>(null);
 
     const pages: StepPage[] = [
-        { page: < UserStep ref={userStepRef} index={0} />, title: "User Information", stepName: "User", index: 0 },
-        { page: < LocationStep ref={userStepRef} index={1} />, title: "Location Permission", stepName: "Location", index: 1 },
-        { page: < PokemonSelectionStep ref={userStepRef} index={2} />, title: "Pokemon Selection", stepName: "Pokemon", index: 2 }
+        { page: < UserStep ref={userStepRef} />, title: "User Information", stepName: "User", index: 0 },
+        { page: < LocationStep ref={userStepRef} />, title: "Location Permission", stepName: "Location", index: 1 },
+        { page: < PokemonSelectionStep ref={userStepRef} />, title: "Pokemon Selection", stepName: "Pokemon", index: 2 }
     ];
 
     const titles = pages.map(({ stepName }) => stepName);
