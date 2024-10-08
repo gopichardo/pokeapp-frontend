@@ -40,6 +40,8 @@ export const PokemonDetailCard = ({ pokemon }: PokemonDetailCardProps) => {
             open={true}
             onClose={handleClose}
             TransitionComponent={Transition}
+            fullWidth
+            maxWidth="md"
         >
             <AppBar sx={{ position: 'relative' }}>
                 <Toolbar>
