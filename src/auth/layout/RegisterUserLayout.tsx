@@ -6,6 +6,7 @@ import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import { UseStepper } from "../../hooks/UseStepper";
 import { RegisterContext } from "../context/RegisterContext";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 type RegisterUserLayoutProps = {
@@ -22,8 +23,16 @@ export const RegisterUserLayout = ({ children, title, steps, onFinish, isStepVal
 
     const { step, totalSteps, prevStep, nextStep, isFirstStep, isFinalStep } = UseStepper({ totalSteps: steps.length, initialStep: currentStep });
 
+    const navigate = useNavigate();
+
+
     const handleOnClickBackButton = () => {
-        prevStep();
+        if (isFirstStep) {
+            navigate(-1);
+        }
+        else {
+            prevStep();
+        }
     }
 
     const handleOnClickNextButton = () => {

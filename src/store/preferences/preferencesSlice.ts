@@ -3,8 +3,8 @@ import { UserPreferencesType } from "../../PokeApp/types/UserPreferences.type";
 import { PokemonItemType } from "../../PokeApp/types/PokemonItem.type";
 import { UserInformationtype } from "../../PokeApp/types/UserInformation.type";
 import { LocationType } from "../../PokeApp/types/Location.type";
-import { LOCAL_STORAGE_PREFERENCES_KEY } from "../../hooks/useSavePreferencesLocalStorage";
 import { decodePreferencesBase64 } from "../../utils/base64-util";
+import { LOCAL_STORAGE_PREFERENCES_KEY } from "../../config/envrinmoment-config";
 
 const initUserPreferences = () => {
   const initialState: UserPreferencesType = {
@@ -61,6 +61,13 @@ export const preferencesSlice = createSlice({
     ) => {
       state = { ...state, ...action.payload };
     },
+    deleteUserPreferences: (state) => {
+      const initialstate = initUserPreferences();
+
+      state.location = initialstate.location;
+      state.userInformation = initialstate.userInformation;
+      state.pokemonList = initialstate.pokemonList;
+    },
   },
 });
 
@@ -70,4 +77,5 @@ export const {
   setUserInformation,
   setLocation,
   setUserPreferences,
+  deleteUserPreferences,
 } = preferencesSlice.actions;

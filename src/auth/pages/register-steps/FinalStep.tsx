@@ -1,8 +1,10 @@
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../../store/store";
+import { useNavigate } from "react-router-dom";
 
 export const FinalStep = () => {
+    const navigate = useNavigate();
 
     const preferences = useSelector((state: IRootState) => state.preferences);
 
@@ -14,7 +16,7 @@ export const FinalStep = () => {
             <code>
                 {JSON.stringify(preferences, null, 2)}
             </code>
-            <Button variant="contained" onClick={() => window.location.href = '/home'} >Go Home</Button>
+            <Button variant="contained" onClick={() => navigate('/home')} >Go Home</Button>
         </>
     )
 }

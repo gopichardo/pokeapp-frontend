@@ -3,8 +3,22 @@ import pokemonImgUrl from '../../assets/images/pokemon-logo.svg'
 import pokeballImgUrl from '../../assets/images/pokeball.png'
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import './PokeAppPage.css';
+import { useSelector } from "react-redux";
+import { IRootState } from "../../store/store";
+import { useNavigate } from "react-router-dom";
 
 export const PokeAppPage = () => {
+
+    const preferences = useSelector((state: IRootState) => state.preferences);
+    const navigate = useNavigate();
+
+    const onClickStart = () => {
+        if (preferences.userInformation.email !== '') {
+            navigate('/home');
+        } else {
+            navigate('/auth/register');
+        }
+    }
 
     return (
         <Grid2 container>
@@ -15,7 +29,14 @@ export const PokeAppPage = () => {
                         <img src={pokeballImgUrl} alt="Pokeball Logo" className="pokeball" />
                     </Box>
                     <Box display="flex" justifyContent="center">
-                        <Button href="/auth/login" color="primary" variant="contained" fullWidth={false} size="large" startIcon={<PlayCircleIcon />}>Start</Button>
+                        <Button
+                            color="primary"
+                            variant="contained"
+                            fullWidth={false}
+                            size="large"
+                            startIcon={<PlayCircleIcon />}
+                            onClick={onClickStart}
+                        >Start</Button>
                     </Box>
                 </Stack>
             </Grid2>

@@ -4,12 +4,14 @@ import { PokemonItemType } from "../../PokeApp/types/PokemonItem.type";
 import { UserInformationtype } from "../../PokeApp/types/UserInformation.type";
 import {
   addPokemonItem,
+  deleteUserPreferences,
   removePokemonItem,
   setLocation,
   setUserInformation,
   setUserPreferences,
 } from "./preferencesSlice";
 import { UserPreferencesType } from "../../PokeApp/types/UserPreferences.type";
+import { deletePreferencesLocalStorage } from "../../hooks/useDeletePreferencesLocalStorage";
 
 export const selectPokemonItem = (pokemon: PokemonItemType) => {
   return async (dispatch: Dispatch) => {
@@ -38,5 +40,12 @@ export const setLocationState = (location: LocationType) => {
 export const setPreferences = (preferences: UserPreferencesType) => {
   return async (dispatch: Dispatch) => {
     dispatch(setUserPreferences(preferences));
+  };
+};
+
+export const logout = () => {
+  return async (dispatch: Dispatch) => {
+    deletePreferencesLocalStorage();
+    dispatch(deleteUserPreferences());
   };
 };

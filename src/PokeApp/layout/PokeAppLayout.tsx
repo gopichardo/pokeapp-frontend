@@ -1,5 +1,5 @@
 import { Container, Grid2 } from "@mui/material"
-import { ResponsiveAppBar } from "../components/ResponsiveAppbar"
+import { ResponsiveAppBar } from "../components/ResponsiveAppBar";
 
 
 type PokeAppLayoutProps = {
