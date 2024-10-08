@@ -21,12 +21,17 @@ export const PokeAppPage = () => {
     }
 
     return (
-        <Grid2 container>
-            <Grid2 size={{ xs: 12, md: 8, lg: 4, xl: 4 }}>
-                <Stack spacing={2} direction="column" display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <Grid2 container flex='1' justifyContent='center' alignItems='center' height='100vh'>
+            <Grid2 size={{ xl: 3, lg: 3, md: 3, sm: 6, xs: 6 }}>
+                <Stack
+                    alignContent='center'
+                    alignItems='center'
+                    display='flex'
+                    spacing={2}
+                >
                     <Box display="flex" justifyContent="center" flexDirection="column" alignItems="center">
-                        <img src={pokemonImgUrl} alt="Pokemon Logo" className="pokemon-logo" />
-                        <img src={pokeballImgUrl} alt="Pokeball Logo" className="pokeball" />
+                        <img src={pokemonImgUrl} alt="Pokemon Logo" className="pokemon-logo" style={{ maxWidth: '100%', height: 'auto' }} />
+                        <img src={pokeballImgUrl} alt="Pokeball Logo" className="pokeball" style={{ maxWidth: '150px', height: 'auto' }} />
                     </Box>
                     <Box display="flex" justifyContent="center">
                         <Button
@@ -40,6 +45,6 @@ export const PokeAppPage = () => {
                     </Box>
                 </Stack>
             </Grid2>
-        </Grid2 >
+        </Grid2>
     )
 }
