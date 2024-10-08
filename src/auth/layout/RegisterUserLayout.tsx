@@ -72,7 +72,7 @@ export const RegisterUserLayout = ({ children, title, steps, onFinish, isStepVal
                         },
                     }}
                 >
-                    <Stepper activeStep={step} alternativeLabel sx={{ mt: 2 }}>
+                    <Stepper activeStep={step} alternativeLabel sx={{ mt: 4 }}>
                         {steps.map((step) => (
                             <Step key={step}>
                                 <StepLabel>{step}</StepLabel>
@@ -82,7 +82,7 @@ export const RegisterUserLayout = ({ children, title, steps, onFinish, isStepVal
                     <Typography variant="h4" align="center" sx={{ mt: 2, mb: 2 }}>
                         {title}
                     </Typography>
-                    <Box flexGrow={1}>
+                    <Box flexGrow={1} height='60vh' flexDirection='column'>
                         {children}
                     </Box>
                     <MobileStepper

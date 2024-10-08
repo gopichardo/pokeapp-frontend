@@ -1,4 +1,4 @@
-import { Alert, Badge, Collapse, Divider, IconButton } from "@mui/material";
+import { Alert, Badge, Box, Collapse, Divider, IconButton } from "@mui/material";
 import { PokemonList } from "../../../PokeApp/components/PokemonList";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { IUserStepRef } from "../../types/user-step-ref.interface";
@@ -37,7 +37,11 @@ export const PokemonSelectionStep = forwardRef<IUserStepRef, unknown>((_, ref) =
     )
 
     return (
-        <>
+        <Box sx={{
+            flexGrow: 1,
+            overflowY: 'auto',
+            height: "100%"
+        }}>
             <Divider textAlign="center" sx={{ mt: 2, fontWeight: "bold" }} variant="fullWidth">
                 Selected Pokemons
                 <Badge color="secondary" badgeContent={currentSelectedPokemons}>
@@ -64,10 +68,9 @@ export const PokemonSelectionStep = forwardRef<IUserStepRef, unknown>((_, ref) =
                     You must select at least {minSelectablePokemons} pokemons
                 </Alert>
             </Collapse>
-
-            <PokemonList
-                pokemonList={allPokemons}
-            />
-        </>
+            <Box flexGrow={1} overflow="auto">
+                <PokemonList pokemonList={allPokemons} />
+            </Box>
+        </Box>
     );
 })
