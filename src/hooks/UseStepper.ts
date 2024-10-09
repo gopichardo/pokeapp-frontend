@@ -1,20 +1,22 @@
-import { useContext } from "react";
-import { RegisterContext } from "../auth/context/RegisterContext";
+import { useSelector } from "react-redux";
+import { IRootState, useAppDispatch } from "../store/store";
+import { setNewStep } from "../store/registerStep/thunks";
 
-export const UseStepper = ({ totalSteps }: UseStepperProps) => {
-  // const [step, setStep] = useState<number>(initialStep);
-
-  const {
-    setStep,
-    step: { currentStep: step },
-  } = useContext(RegisterContext);
+export const useStepper = ({ totalSteps }: UseStepperProps) => {
+  const step = useSelector((state: IRootState) => state.registerStep.step);
+  const dispatch = useAppDispatch();
 
   const nextStep = () => {
-    if (step < totalSteps - 1) setStep({ currentStep: step + 1 });
+    if (totalSteps - 1 === step) {
+      dispatch(setNewStep(0));
+    }
+    if (step < totalSteps - 1) {
+      dispatch(setNewStep(step + 1));
+    }
   };
 
   const prevStep = () => {
-    if (step > 0) setStep({ currentStep: step - 1 });
+    if (step > 0) dispatch(setNewStep(step - 1));
   };
 
   return {

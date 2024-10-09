@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 .env
 temp
+tsconfig.app.tsbuildinfo
+tsconfig.node.tsbuildinfo

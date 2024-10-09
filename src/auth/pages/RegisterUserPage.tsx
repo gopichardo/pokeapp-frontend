@@ -4,15 +4,16 @@ import { UserStep } from "./register-steps/UserStep";
 import { StepPage } from "../../PokeApp/types/StepPage";
 import { LocationStep } from "./register-steps/LocationStep";
 import { PokemonSelectionStep } from "./register-steps/PokemonSelectionStep";
-import { RegisterContext } from "../context/RegisterContext";
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { FinalStep } from "./register-steps/FinalStep";
 import { IUserStepRef } from "../types/user-step-ref.interface";
 import { useSavePreferencesLocalStorage } from "../../hooks/useSavePreferencesLocalStorage";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../store/store";
 
 export const RegisterUserPage = () => {
     useSavePreferencesLocalStorage();
-    const { step: { currentStep } } = useContext(RegisterContext)
+
     const userStepRef = useRef<IUserStepRef>(null);
 
     const pages: StepPage[] = [
@@ -20,6 +21,8 @@ export const RegisterUserPage = () => {
         { page: < LocationStep ref={userStepRef} />, title: "Location Permission", stepName: "Location", index: 1 },
         { page: < PokemonSelectionStep ref={userStepRef} />, title: "Pokemon Selection", stepName: "Pokemon", index: 2 }
     ];
+
+    const currentStep = useSelector((state: IRootState) => state.registerStep.step);
 
     const titles = pages.map(({ stepName }) => stepName);
 
