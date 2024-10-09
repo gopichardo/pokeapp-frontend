@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
+import { useFetchWeather } from "./useFetchWeather";
 
 type LocationResponse = {
   latitude?: number;
@@ -34,6 +35,11 @@ export const useBrowserGeolocation = (params?: UseBrowserGeolocationParams) => {
     timeout: 5000,
     maximumAge: 0,
   };
+
+  const { weather } = useFetchWeather({
+    latitude: locationResponse.latitude as number,
+    longitude: locationResponse.longitude as number,
+  });
 
   const success = (pos: any) => {
     const crd = pos.coords;
@@ -86,5 +92,6 @@ export const useBrowserGeolocation = (params?: UseBrowserGeolocationParams) => {
     queryLocationPermission,
     locationEnabled,
     setLocationEnabled,
+    weather,
   };
 };
