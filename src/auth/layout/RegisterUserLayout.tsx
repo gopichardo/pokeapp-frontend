@@ -4,7 +4,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import { useNavigate } from "react-router-dom";
-import { useStepper } from "../../hooks/useStepper";
+import { useStepper } from "../../hooks/UseStepper";
 
 
 type RegisterUserLayoutProps = {
