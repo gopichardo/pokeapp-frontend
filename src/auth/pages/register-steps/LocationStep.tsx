@@ -6,43 +6,38 @@ import { useBrowserGeolocation } from "../../../hooks/useBrowserGeolocation";
 import { useSelector } from "react-redux";
 import { setLocationState } from "../../../store/preferences/thunks";
 import { WaetherCard } from "../../../PokeApp/components/WaetherCard";
-import { useFetchWeather } from "../../../hooks/useFetchWeather";
-import { WeatherData } from "../../../domain/model/weather.model";
 
 export const LocationStep = forwardRef<IUserStepRef, unknown>((_, ref) => {
     const dispatch = useAppDispatch();
 
     const preferences = useSelector((state: IRootState) => state.preferences);
-    const { location: { latitude, longitude, locationEnabled: stateLocationEnabled } } = preferences;
-
-    const { weather } = useFetchWeather({ latitude, longitude });
-
-    const {
-        description,
-        humidity,
-        cityName,
-        currentTemperature,
-        minTemperature,
-        maxTemperature } = weather as WeatherData;
+    const { location: { latitude: stateLatitude, longitude: stateLongitude, locationEnabled: stateLocationEnabled } } = preferences;
 
     const {
         queryLocationPermission,
-        locationResponse,
+        locationResponse: { latitude, longitude },
         askForGeolocationSupport,
         locationEnabled,
-        setLocationEnabled
+        setLocationEnabled,
+        weather: {
+            description,
+            humidity,
+            cityName,
+            currentTemperature,
+            minTemperature,
+            maxTemperature
+        },
     } = useBrowserGeolocation(
         {
-            defaultLatitude: latitude,
-            defaultLongitude: longitude,
+            defaultLatitude: stateLatitude,
+            defaultLongitude: stateLongitude,
             defaultLocationEnabled: stateLocationEnabled
         });
+
 
     useEffect(() => {
         askForGeolocationSupport();
     }, [locationEnabled])
-
-
 
 
     const handleOnCheckAllowLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,8 +52,6 @@ export const LocationStep = forwardRef<IUserStepRef, unknown>((_, ref) => {
     useImperativeHandle(ref, () => {
         return {
             validateStep: () => {
-                const { latitude, longitude } = locationResponse;
-
                 dispatch(setLocationState({
                     latitude: latitude as number,
                     longitude: longitude as number,
@@ -88,8 +81,8 @@ export const LocationStep = forwardRef<IUserStepRef, unknown>((_, ref) => {
                 locationEnabled &&
                 <WaetherCard
                     cityName={cityName}
-                    latitude={latitude}
-                    longitude={longitude}
+                    latitude={latitude as number}
+                    longitude={longitude as number}
                     description={description}
                     currentTemperature={currentTemperature}
                     minTemperature={minTemperature}
