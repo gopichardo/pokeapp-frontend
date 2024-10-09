@@ -5,9 +5,12 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
 import PokeballIcon from '../../assets/images/pokeball.png'
 import { PokeAppLayout } from "../layout/PokeAppLayout";
+import { useNavigate } from "react-router-dom";
 
 export const HomePage = () => {
     const preferences = useSelector((state: IRootState) => state.preferences);
+    const navigate = useNavigate();
+
 
     const { userInformation, pokemonList } = preferences;
 
@@ -35,7 +38,7 @@ export const HomePage = () => {
                             </Typography>
                         }
                         action={
-                            <IconButton href="/pokemon-list" color="primary">
+                            <IconButton color="primary" onClick={() => { navigate("/pokemon-list") }}>
                                 <ArrowForwardIcon />
                             </IconButton>
                         }
@@ -57,7 +60,7 @@ export const HomePage = () => {
                             </Typography>
                         }
                         action={
-                            <IconButton href="/weather" color="primary">
+                            <IconButton color="primary" onClick={() => { navigate("/weather") }}>
                                 <ArrowForwardIcon />
                             </IconButton>
                         }

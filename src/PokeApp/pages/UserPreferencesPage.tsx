@@ -8,10 +8,13 @@ import { useRef, useState } from "react";
 import { IUserStepRef } from "../../auth/types/user-step-ref.interface";
 import { useSavePreferencesLocalStorage } from "../../hooks/useSavePreferencesLocalStorage"
 import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from "react-router-dom"
 
 
 export const UserPreferencesPage = () => {
   useSavePreferencesLocalStorage();
+  const navigate = useNavigate();
+
 
   const userRef = useRef<IUserStepRef>(null);
   const locationRef = useRef<IUserStepRef>(null);
@@ -54,7 +57,7 @@ export const UserPreferencesPage = () => {
             variant="standard"
             severity="success"
             action={
-              <Button size="small" color="inherit" variant="text" href="/home">
+              <Button size="small" color="inherit" variant="text" onClick={() => { navigate("/home") }}>
                 Go Home
               </Button>
             }
