@@ -1,3 +1,3 @@
 export type StepPageType = {
-  currentStep: number;
+  step: number;
 };

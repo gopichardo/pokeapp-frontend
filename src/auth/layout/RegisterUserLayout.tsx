@@ -3,10 +3,8 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
-import { UseStepper } from "../../hooks/UseStepper";
-import { RegisterContext } from "../context/RegisterContext";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useStepper } from "../../hooks/useStepper";
 
 
 type RegisterUserLayoutProps = {
@@ -18,10 +16,14 @@ type RegisterUserLayoutProps = {
 }
 
 export const RegisterUserLayout = ({ children, title, steps, onFinish, isStepValid }: RegisterUserLayoutProps) => {
-
-    const { step: { currentStep } } = useContext(RegisterContext)
-
-    const { step, totalSteps, prevStep, nextStep, isFirstStep, isFinalStep } = UseStepper({ totalSteps: steps.length, initialStep: currentStep });
+    const {
+        step,
+        totalSteps,
+        prevStep,
+        nextStep,
+        isFirstStep,
+        isFinalStep
+    } = useStepper({ totalSteps: steps.length, initialStep: 0 });
 
     const navigate = useNavigate();
 
